@@ -9,7 +9,7 @@ defmodule Poker do
 
   defmacro dep(class) do
     if Mix.env() == :test do
-      quote do overridable_dependency(unquote(class)) end
+      quote do Poker.overridable_dependency(unquote(class)) end
     else
       quote do unquote(class) end
     end

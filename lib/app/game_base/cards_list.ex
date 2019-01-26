@@ -55,7 +55,7 @@ defmodule Poker.GameBase.CardsList do
     |> take_first_group_of(&Enum.count(&1) == 2)
   end
 
-  @spec count_groups_of(t(), integer(), proc()) :: integer()
+  @spec count_groups_of(t(), integer(), function()) :: integer()
   def count_groups_of(cards, group_length, proc) do
     cards
     |> Enum.group_by(proc)

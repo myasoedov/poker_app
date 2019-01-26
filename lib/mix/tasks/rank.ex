@@ -3,12 +3,12 @@ defmodule Mix.Tasks.Rank do
 
   alias Poker.GameBase.Card
   alias Poker.GameBase.Rank
-
   alias Poker.Notation
 
   @impl Mix.Task
-  def run(args) do
-    #Mix.shell.info Enum.join(args, " ")
+  def run(_args) do
+    Mix.shell.info("Who will win?")
+    Mix.shell.info("* enter \\q to exit")
 
     with {:ok, cards1} <- prompt_cards_for("Black"),
          {:ok, cards2} <- prompt_cards_for("White") do
@@ -45,7 +45,7 @@ defmodule Mix.Tasks.Rank do
   end
 
   defp compare({name1, cards1}, {name2, cards2}) do
-    case Poker.GameBase.Rank.compare(cards1, cards2) do
+    case Rank.compare(cards1, cards2) do
       :eq -> Mix.shell.info("Tie")
       {:gt, {:rule, rule}} -> Mix.shell.info("#{name1} wins - #{rule}")
       {:gt, {:card, card}} -> Mix.shell.info("#{name1} wins - highest card - #{Card.value(card)}")
@@ -55,6 +55,6 @@ defmodule Mix.Tasks.Rank do
   end
 
   defp exit?(input) do
-    input |> String.trim() == "\q"
+    input |> String.trim() == "\\q"
   end
 end

@@ -11,21 +11,6 @@ config :app,
   namespace: Poker,
   ecto_repos: [Poker.Repo]
 
-# Configures the endpoint
-config :app, PokerWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "uWclC4eBECs8/tDYiYrWBD2xRTiv+bsc29bCu+5kDa+wJvWuGd4UTwuubasfE5vK",
-  render_errors: [view: PokerWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Poker.PubSub, adapter: Phoenix.PubSub.PG2]
-
-# Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
-
-# Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
