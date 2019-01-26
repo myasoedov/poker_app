@@ -7,34 +7,31 @@ defmodule Poker.GameBase.Card do
   @type t :: {value(), suit()}
   @type cards_list :: list(t())
 
-  @type diff() :: :lt | :gt
-  @type eq() :: :eq
-  @type diff_reason() :: {:card, Card.t()}
-  @type compare_result() :: eq() | {diff(), diff_reason()}
+  @type comparison() :: :lt | :gt | :eq
 
   @spec create(value(), suit()) :: t()
   def create(value, suit), do: {value, suit}
 
   @spec suit(t()) :: suit()
-  def suit({suit, _value}), do: suit
+  def suit({_value, suit}), do: suit
 
   @spec value(t()) :: value()
-  def value({_suit, value}), do: value
+  def value({value, _suit}), do: value
 
-  @spec compare_value(t()) :: diff() | eq()
-  def compare_value(card1, card2)
+  @spec compare_value(t(), t()) :: comparison()
+  def compare_value(card1, card2) do
     priority1 = to_value_priority(card1)
     priority2 = to_value_priority(card2)
 
     cond do
       priority1 > priority2 -> :gt
       priority1 < priority2 -> :lt
-      true -> eq
+      true -> :eq
     end
   end
 
   @spec to_value_priority(value() | t()) :: integer_rate()
-  def to_value_priority({_suit, value}), do: to_integer_rate(value)
+  def to_value_priority({value, _suit}), do: to_value_priority(value)
   def to_value_priority(value) when is_integer(value), do: value
   def to_value_priority(:jack), do: 11
   def to_value_priority(:queen), do: 12
