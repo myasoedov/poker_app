@@ -1,5 +1,7 @@
 defmodule Poker.GameBase.Rank do
-  @moduledoc false
+  @moduledoc """
+    Rank ability
+  """
 
   alias Poker.GameBase.Card
   alias Poker.GameBase.CardsList

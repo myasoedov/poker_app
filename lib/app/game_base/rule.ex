@@ -1,4 +1,8 @@
 defmodule Poker.GameBase.Rule do
+  @moduledoc """
+    Rank rule utils
+  """
+
   alias Poker.GameBase.CardsList
   alias Poker.GameBase.Card
   alias Poker.GameBase.Rank
@@ -36,6 +40,18 @@ defmodule Poker.GameBase.Rule do
     full_house: FullHouse,
     four_of_a_kind: FourOfAKind,
     straight_flush: StraightFlush
+  }
+
+  @names %{
+    high_card: "High card",
+    pair: "Pair",
+    two_pairs: "Two pairs",
+    three_of_a_kind: "Three of a kind",
+    straight: "Straight",
+    flush: "Flush",
+    full_house: "Full house",
+    four_of_a_kind: "Four of a kind",
+    straight_flush: "Straight flush"
   }
 
   @rule_by_asc_priority ~w(
@@ -88,6 +104,9 @@ defmodule Poker.GameBase.Rule do
   def compare_by_rule(rule, cards1, cards2) do
     get_comparator(rule).compare(cards1, cards2)
   end
+
+  @spec to_string(t()) :: String.t()
+  def to_string(rule), do: @names[rule]
 
   defp get_comparator(rule) do
     @default_comparator_table

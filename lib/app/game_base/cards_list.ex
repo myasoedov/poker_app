@@ -1,8 +1,15 @@
 defmodule Poker.GameBase.CardsList do
+  @moduledoc """
+    Cards list math
+  """
+
   alias Poker.GameBase.Card
 
   @type t() :: list(Card.t())
 
+  @doc """
+    Compares cards lists
+  """
   @spec compare(t(), t()) :: Card.compare_result()
   def compare(cards1, cards2) do
     Enum.reduce_while(cards1, cards2, fn card1, [card2 | cards2] ->
@@ -19,75 +26,60 @@ defmodule Poker.GameBase.CardsList do
     end)
   end
 
-  @spec highest_value_card(t()) :: Card.t()
-  def highest_value_card(cards) do
+  @doc """
+    Returns highest value card from list
+  """
+  @spec highest_card(t()) :: Card.t()
+  def highest_card(cards) do
     cards
     |> Enum.sort(&Card.to_value_priority(&1) <= Card.to_value_priority(&2))
     |> hd()
   end
 
-  @spec take_same_value_pair(t()) :: {t(), t()}
-  def take_same_value_pair(cards) do
+  @doc """
+    Returns first group with `group_length` elements grouped by `group_proc`
+  """
+  @spec take_group_of(t(), integer(), function()) :: integer()
+  def take_group_of(cards, group_length, group_proc) do
     cards
-    |> group_by_values()
-    |> take_first_group_of(&Enum.count(&1) == 2)
+    |> Enum.group_by(group_proc)
+    |> Map.values()
+    |> first_group_with(&Enum.count(&1) == group_length)
   end
 
-  @spec take_same_value_trinity(t()) :: {t(), t()}
-  def take_same_value_trinity(cards) do
+  @doc """
+    Returns pair with highest value card
+  """
+  @spec take_highest_pair(t()) :: t()
+  def take_highest_pair(cards) do
     cards
-    |> group_by_values()
-    |> take_first_group_of(&Enum.count(&1) == 3)
+    |> Enum.group_by(&Card.value/1)
+    |> Map.values()
+    |> Enum.sort(fn cards1, cards2 ->
+      card1 = highest_card(cards1)
+      card2 = highest_card(cards2)
+
+      Card.to_value_priority(card1) < Card.to_value_priority(card2)
+    end)
+    |> first_group_with(&Enum.count(&1) == 2)
   end
 
-  @spec take_same_value_quad(t()) :: {t(), t()}
-  def take_same_value_quad(cards) do
-    cards
-    |> group_by_values()
-    |> take_first_group_of(&Enum.count(&1) == 4)
-  end
-
-  @spec take_highest_value_pair(t()) :: t()
-  def take_highest_value_pair(cards) do
-    cards
-    |> group_by_values()
-    |> Enum.sort(fn [card | _tail] -> -Card.to_value_priority(card) end)
-    |> take_first_group_of(&Enum.count(&1) == 2)
-  end
-
+  @doc """
+    Calculates count of group of `group_length` elements grouped by `group_proc`
+  """
   @spec count_groups_of(t(), integer(), function()) :: integer()
-  def count_groups_of(cards, group_length, proc) do
+  def count_groups_of(cards, group_length, group_proc) do
     cards
-    |> Enum.group_by(proc)
+    |> Enum.group_by(group_proc)
     |> Map.values()
     |> Enum.reject(&Enum.count(&1) != group_length)
     |> Enum.count()
   end
 
-  def same_value_pairs_count(cards) do
-    cards
-    |> group_by_values()
-    |> Enum.reject(&Enum.count(&1) != 2)
-    |> Enum.count()
-  end
-
-  def take_first_group_of(groups, proc) do
-    {group, left} = Enum.reduce(groups, {nil, []}, fn group, {selected, left} ->
-      cond do
-        selected != nil -> {selected, [group | left]}
-        proc.(group) -> {group, left}
-        true -> {selected, [group | left]}
-      end
-    end)
-
-    if group != nil do
-      {group, Enum.concat(left)}
-    else
-      nil
-    end
-  end
-
-
+  @doc """
+    Checks if cards list contains consecutive values
+  """
+  @spec consecutive?(t()) :: boolean()
   def consecutive?(cards) do
     cards
     |> Enum.map(&Card.to_value_priority/1)
@@ -106,6 +98,10 @@ defmodule Poker.GameBase.CardsList do
     |> elem(1)
   end
 
+  @doc """
+    Checks if cards from the list have the same suit
+  """
+  @spec all_same_suit?(t()) :: boolean()
   def all_same_suit?(cards) do
     cards
     |> Enum.map(&Card.suit/1)
@@ -119,15 +115,19 @@ defmodule Poker.GameBase.CardsList do
     |> elem(1)
   end
 
-  def group_by_suits(cards) do
-    cards
-    |> Enum.group_by(&Card.suit/1)
-    |> Map.values()
-  end
+  defp first_group_with(groups, cond_proc) do
+    {group, left} = Enum.reduce(groups, {nil, []}, fn group, {selected, left} ->
+      cond do
+        selected != nil -> {selected, [group | left]}
+        cond_proc.(group) -> {group, left}
+        true -> {selected, [group | left]}
+      end
+    end)
 
-  def group_by_values(cards) do
-    cards
-    |> Enum.group_by(&Card.value/1)
-    |> Map.values()
+    if group != nil do
+      {group, Enum.concat(left)}
+    else
+      nil
+    end
   end
 end

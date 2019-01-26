@@ -5,5 +5,6 @@
   * docker
 
 ## Run
-  `make rank` for rank ui
+  `make interactive` for interactive rank
   `make test` for test
+  `make bash` to enter container

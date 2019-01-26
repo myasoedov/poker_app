@@ -6,8 +6,8 @@ defmodule Poker.GameBase.Rule.FullHouse do
   @behaviour Behaviour
 
   def compare(cards1, cards2) do
-    {trinity1, _left1} = CardsList.take_same_value_trinity(cards1)
-    {trinity2, _left2} = CardsList.take_same_value_trinity(cards2)
+    {trinity1, _left1} = CardsList.take_group_of(cards1, 3, &Card.value/1)
+    {trinity2, _left2} = CardsList.take_group_of(cards2, 3, &Card.value/1)
 
     case Card.compare_value(hd(trinity1), hd(trinity2)) do
       :eq -> :eq

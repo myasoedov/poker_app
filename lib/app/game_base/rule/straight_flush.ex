@@ -6,8 +6,8 @@ defmodule Poker.GameBase.Rule.StraightFlush do
   @behaviour Behaviour
 
   def compare(cards1, cards2) do
-    highest1 = CardsList.highest_value_card(cards1)
-    highest2 = CardsList.highest_value_card(cards2)
+    highest1 = CardsList.highest_card(cards1)
+    highest2 = CardsList.highest_card(cards2)
 
     case Card.compare_value(highest1, highest2) do
       :eq -> :eq

@@ -6,8 +6,8 @@ defmodule Poker.GameBase.Rule.ThreeOfAKind do
   @behaviour Behaviour
 
   def compare(cards1, cards2) do
-    {pair1, _left1} = CardsList.take_same_value_trinity(cards1)
-    {pair2, _left2} = CardsList.take_same_value_trinity(cards2)
+    {pair1, _left1} = CardsList.take_group_of(cards1, 3, &Card.value/1)
+    {pair2, _left2} = CardsList.take_group_of(cards2, 3, &Card.value/1)
 
     case Card.compare_value(hd(pair1), hd(pair2)) do
       :eq -> :eq

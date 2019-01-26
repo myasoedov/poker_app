@@ -7,8 +7,8 @@ defmodule Poker.GameBase.Rule.TwoPairs do
   @behaviour Behaviour
 
   def compare(cards1, cards2) do
-    {pair1, left1} = CardsList.take_highest_value_pair(cards1)
-    {pair2, left2} = CardsList.take_highest_value_pair(cards2)
+    {pair1, left1} = CardsList.take_highest_pair(cards1)
+    {pair2, left2} = CardsList.take_highest_pair(cards2)
 
     case Card.compare_value(hd(pair1), hd(pair2)) do
       :eq -> Rule.compare_by_rule(:pair, left1, left2)

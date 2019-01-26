@@ -1,5 +1,7 @@
 defmodule Poker.GameBase.Card do
-  @moduledoc false
+  @moduledoc """
+    Card type with utils
+  """
 
   @type value :: 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | :jack | :queen | :king | :ace
   @type suit :: :clubs | :diamonds | :hearts | :spaces
