@@ -1,5 +1,7 @@
 defmodule Poker.Notation do
   alias Poker.Notation.Short
 
-  def parse(line), do: Short.parse(line)
+  import Poker.Overridable
+
+  def parse(line), do: overridable(Short).parse(line)
 end

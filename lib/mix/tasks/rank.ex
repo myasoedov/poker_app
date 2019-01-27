@@ -28,11 +28,11 @@ defmodule Mix.Tasks.Rank do
       compare({"Black", cards1}, {"White", cards2})
     else
       {user, nil} ->
-        Mix.shell.info("Argument --#{user} is not set")
+        Mix.shell.error("Argument --#{user} is not set")
         show_usage()
 
       {user, {:error, reason}} ->
-        Mix.shell.info("Parse --#{user} failed : #{parse_error(reason)}")
+        Mix.shell.error("Parse --#{user} failed : #{parse_error(reason)}")
         show_usage()
     end
   end

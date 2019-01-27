@@ -9,6 +9,7 @@ defmodule Poker.Notation.Short do
 
   def parse(line) do
     line
+    |> String.trim()
     |> String.split(" ")
     |> Enum.map(&prepare/1)
     |> Enum.map(&parse_entity/1)
@@ -49,7 +50,7 @@ defmodule Poker.Notation.Short do
   defp detect_suit("C"), do: :clubs
   defp detect_suit("D"), do: :diamonds
   defp detect_suit("H"), do: :hearts
-  defp detect_suit("S"), do: :spaces
+  defp detect_suit("S"), do: :spades
 
   defp prepare(string), do: string |> String.trim() |> String.upcase()
 end

@@ -11,7 +11,8 @@ defmodule Poker.GameBase.Rule.FullHouse do
 
     case Card.compare_value(hd(trinity1), hd(trinity2)) do
       :eq -> :eq
-      {result, card} -> {result, {:card, card}}
+      :gt -> {:gt, {:card, hd(trinity1)}}
+      :lt -> {:lt, {:card, hd(trinity2)}}
     end
   end
 end

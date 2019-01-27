@@ -12,6 +12,9 @@ defmodule Poker.GameBase.CardsList do
   """
   @spec compare(t(), t()) :: Card.compare_result()
   def compare(cards1, cards2) do
+    cards1 = sort_desc(cards1)
+    cards2 = sort_desc(cards2)
+
     Enum.reduce_while(cards1, cards2, fn card1, [card2 | cards2] ->
       case Card.compare_value(card1, card2) do
         :gt -> {:halt, {:gt, card1}}
@@ -32,14 +35,14 @@ defmodule Poker.GameBase.CardsList do
   @spec highest_card(t()) :: Card.t()
   def highest_card(cards) do
     cards
-    |> Enum.sort(&Card.to_value_priority(&1) <= Card.to_value_priority(&2))
+    |> sort_desc()
     |> hd()
   end
 
   @doc """
     Returns first group with `group_length` elements grouped by `group_proc`
   """
-  @spec take_group_of(t(), integer(), function()) :: integer()
+  @spec take_group_of(t(), integer(), function()) :: {t(), t()}
   def take_group_of(cards, group_length, group_proc) do
     cards
     |> Enum.group_by(group_proc)
@@ -59,7 +62,7 @@ defmodule Poker.GameBase.CardsList do
       card1 = highest_card(cards1)
       card2 = highest_card(cards2)
 
-      Card.to_value_priority(card1) < Card.to_value_priority(card2)
+      Card.to_value_priority(card1) > Card.to_value_priority(card2)
     end)
     |> first_group_with(&Enum.count(&1) == 2)
   end
@@ -129,5 +132,9 @@ defmodule Poker.GameBase.CardsList do
     else
       nil
     end
+  end
+
+  defp sort_desc(list) do
+    Enum.sort(list, &Card.to_value_priority(&1) >= Card.to_value_priority(&2))
   end
 end

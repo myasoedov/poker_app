@@ -12,7 +12,8 @@ defmodule Poker.GameBase.Rule.Pair do
 
     case Card.compare_value(hd(pair1), hd(pair2)) do
       :eq -> Rule.compare_by_rule(:high_card, left1, left2)
-      {result, card} -> {result, {:card, card}}
+      :gt -> {:gt, {:card, hd(pair1)}}
+      :lt -> {:lt, {:card, hd(pair2)}}
     end
   end
 end

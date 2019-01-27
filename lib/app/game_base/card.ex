@@ -4,7 +4,7 @@ defmodule Poker.GameBase.Card do
   """
 
   @type value :: 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | :jack | :queen | :king | :ace
-  @type suit :: :clubs | :diamonds | :hearts | :spaces
+  @type suit :: :clubs | :diamonds | :hearts | :spades
   @type integer_rate :: integer()
   @type t :: {value(), suit()}
   @type cards_list :: list(t())

@@ -11,7 +11,8 @@ defmodule Poker.GameBase.Rule.StraightFlush do
 
     case Card.compare_value(highest1, highest2) do
       :eq -> :eq
-      {result, card} -> {result, {:card, card}}
+      :gt -> {:gt, {:card, highest1}}
+      :lt -> {:lt, {:card, highest2}}
     end
   end
 end

@@ -18,7 +18,7 @@ defmodule Poker.GameBase.Rule do
     StraightFlush
   }
 
-  import Poker, only: [dep: 1]
+  import Poker.Overridable, only: [overridable: 1]
 
   @type t() :: :high_card |
                :pair |
@@ -111,7 +111,7 @@ defmodule Poker.GameBase.Rule do
   defp get_comparator(rule) do
     @default_comparator_table
     |> Map.fetch!(rule)
-    |> dep()
+    |> overridable()
   end
 
   defp rule_to_priority(rule), do: Enum.find_index(@rule_by_asc_priority, &(&1 == rule))
